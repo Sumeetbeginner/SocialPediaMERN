@@ -12,3 +12,23 @@ import morgan from 'morgan' //useful for monitoring and debugging request detail
 
 import path from "path"
 import { fileURLToPath } from 'url'
+
+// CONFIGURATIONS
+const __filename = fileURLToPath(import.meta.url) //Grab File URL - Only Works on type module
+const __dirname = path.dirname(__filename)
+
+dotenv.config()
+
+const app = express()
+app.use(express.json())
+app.use(helmet())
+app.use(helmet.crossOriginResourcePolicy({policy:"cross-origin"}))  //Any origin can acces resource from my server
+app.use(morgan("common"))
+
+app.use(bodyParser.json({limit : "30mb", extended:true}))
+app.use(bodyParser.urlencoded({limit : "30mb", extended:true}))
+
+app.use(cors())
+
+app.use('/assets', express.static(path.join(__dirname, 'public/assets')))  //To store images locally, In real use Storage Cloud
+
