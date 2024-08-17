@@ -22,6 +22,11 @@ import {createPost} from './controllers/posts.js'
 
 import { verifyToken } from './middleware/auth.js'
 
+// Manually Inject some data in database
+import User from './models/User.js'
+import Post from './models/Post.js'
+import { users, posts } from './data/index.js'
+
 // CONFIGURATIONS
 const __filename = fileURLToPath(import.meta.url) //Grab File URL - Only Works on type module
 const __dirname = path.dirname(__filename)
@@ -68,6 +73,10 @@ const PORT = process.env.PORT || 6001
 mongoose.connect(process.env.MONGO_URL)
 .then(() =>{
     app.listen(PORT, () => console.log(`SERVER Port : ${PORT}`))
+
+    //! ADD DATA ONLY ONE TIME
+    // User.insertMany(users)
+    // Post.insertMany(posts)
     
 })
 .catch((error) =>{
