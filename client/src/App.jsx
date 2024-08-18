@@ -3,31 +3,28 @@ import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import Home from "./scenes/homePage/Home"; // No './' due to jsconfig
 import Login from "./scenes/loginPage/Login";
 import Profile from "./scenes/profilePage/Profile";
-import authReducer from './state'
-import { configureStore } from "@reduxjs/toolkit";
-import {Provider} from 'react-redux'
-import {
-  persistStore,
-  persistReducer,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER
-} from 'redux-persist'
-import storage from "redux-persist/lib/storage";
-import { PersistGate } from "redux-persist/integration/react";
- 
+import { useMemo } from "react";
+import { useSelector } from "react-redux";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
+import { themeSettings } from "./theme.js";
+
 const App = () => {
+  const mode = useSelector((state) => state.mode);
+  const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
+
   return (
     <div className="app">
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/profile/:userId" element={<Profile />} />
-        </Routes>
+        <ThemeProvider theme={theme}>
+          <CssBaseline>
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/profile/:userId" element={<Profile />} />
+            </Routes>
+          </CssBaseline>
+        </ThemeProvider>
       </BrowserRouter>
     </div>
   );
